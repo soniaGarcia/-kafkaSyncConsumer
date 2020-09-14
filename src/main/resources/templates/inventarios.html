@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html ng-app="inventarios">
+    <head>
+        <meta charset="UTF-8" />
+        <!-- Bootstrap core CSS -->
+        <link href="../static/css/bootstrap.css" rel="stylesheet" th:href="@{/css/bootstrap.css}"/>
+        <title>Consulta de Inventario</title>
+    </head>
+
+    <body ng-app="kafkaspringboot" ng-controller="InventarioController" ng-init="getInventario()">
+       
+        <div class="container pt-3" >
+            <table class="table table-hover table-bordered  table-sm">
+                <thead>
+                    <tr class="table-primary">
+                        <th>Codigo </th>
+                        <th>Cantidad </th>
+                        <th>Precio </th>
+                    </tr>
+                </thead>
+                <tr ng-repeat="inv in inventarios">
+                    <td>{{inv.codigo}}</td>
+                    <td>{{inv.cantidad}}</td>
+                    <td>{{inv.precio}}</td>
+                </tr>
+            </table>
+
+        </div>
+
+
+
+
+
+      <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.js"></script>
+      <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-resource.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-touch.js"></script>
+  <script src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-1.3.3.js"></script>
+        <script src="./js/services.js"></script>
+    </body>
+</html>
