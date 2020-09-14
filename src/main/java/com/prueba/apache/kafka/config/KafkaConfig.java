@@ -24,51 +24,21 @@ import org.springframework.kafka.support.serializer.JsonDeserializer;
 @Configuration
 public class KafkaConfig {
 
-     @Bean
-    public ConsumerFactory<String, String> consumerFactory() {
-        Map<String, Object> props = new HashMap<>();
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "http://172.17.0.8:9092");
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "vehiculo-result-group");
-        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        return new DefaultKafkaConsumerFactory<>(props);
-    }
-    
-    @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, String>
-            kafkaListenerContainerFactory() {
-
-        ConcurrentKafkaListenerContainerFactory<String, String> factory
-                = new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(consumerFactory());
-        return factory;
-    }
-
-    public ConsumerFactory<String, VehiculoMsj> vehiculoConsumerFactory() {
-        Map<String, Object> props = new HashMap<>();
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,"http://172.17.0.8:9092");
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "vehiculo-result-group");
-
-        return new DefaultKafkaConsumerFactory<>(
-                props,
-                new StringDeserializer(),
-                new JsonDeserializer<>(VehiculoMsj.class));
-    }
-
-    @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, VehiculoMsj> vehiculoKafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, VehiculoMsj> factory
-                = new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(vehiculoConsumerFactory());
-        return factory;
-    }
-    
     @Bean
     public ReplyingKafkaTemplate<String, VehiculoMsj, ResultMsj> replyingKafkaTemplate(ProducerFactory<String, VehiculoMsj> pf,
             ConcurrentKafkaListenerContainerFactory<String, ResultMsj> factory) {
         ConcurrentMessageListenerContainer<String, ResultMsj> replyContainer = factory.createContainer("result");
         replyContainer.getContainerProperties().setMissingTopicsFatal(false);
         replyContainer.getContainerProperties().setGroupId("vehiculo-result-group");
+        
+        Map<String, Object> props = new HashMap<>();
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "http://172.17.0.8:9092");
+//        props.put(ConsumerConfig.GROUP_ID_CONFIG, "vehiculo-result-group");
+//        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+//        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        
+        
+        replyContainer.getContainerProperties().getConsumerProperties().putAll(props);
         return new ReplyingKafkaTemplate<>(pf, replyContainer);
     }
 
