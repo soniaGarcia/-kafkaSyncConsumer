@@ -4,6 +4,7 @@ import com.prueba.apache.kafka.mensajeDTO.ResultMsj;
 import com.prueba.apache.kafka.mensajeDTO.VehiculoMsj;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.context.annotation.Bean;
@@ -31,14 +32,9 @@ public class KafkaConfig {
         replyContainer.getContainerProperties().setMissingTopicsFatal(false);
         replyContainer.getContainerProperties().setGroupId("vehiculo-result-group");
         
-        Map<String, Object> props = new HashMap<>();
+        Properties props = new Properties();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "http://172.17.0.8:9092");
-//        props.put(ConsumerConfig.GROUP_ID_CONFIG, "vehiculo-result-group");
-//        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-//        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        
-        
-        replyContainer.getContainerProperties().getConsumerProperties().putAll(props);
+        replyContainer.getContainerProperties().setConsumerProperties(props);
         return new ReplyingKafkaTemplate<>(pf, replyContainer);
     }
 
