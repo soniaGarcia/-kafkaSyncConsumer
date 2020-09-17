@@ -24,11 +24,13 @@ public class ConsumidorKafka {
         System.out.println("Actualizando inventario para "+message.getCodigo()+"...");
         BooleanExpression bol = QInventario.inventario.codigo.eq(message.codigo);
         Optional<Inventario> inv = inventarioRepository.findOne(bol);
+        int ban =0;
         if (inv.isPresent()) {
             Inventario obtenido = inv.get();
             if (obtenido.id != null) {
                 obtenido.cantidad = obtenido.cantidad + 1;
                 inventarioRepository.save(obtenido);
+                ban=1;
             }
         } else {
             Inventario persisInv = new Inventario();
@@ -40,7 +42,7 @@ public class ConsumidorKafka {
 
         ResultMsj result = new ResultMsj();
         result.setCodigo("00");
-        result.setDescripcion("Exito");
+        result.setDescripcion("Exito. Registro "+(ban ==0 ? "Ingresado":"Actualizado")+ "Codigo: "+message.getCodigo());
         return result;
     }
 
