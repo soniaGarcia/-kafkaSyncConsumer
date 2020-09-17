@@ -2,8 +2,6 @@ package com.prueba.apache.kafka.config;
 
 import com.prueba.apache.kafka.mensajeDTO.ResultMsj;
 import com.prueba.apache.kafka.mensajeDTO.VehiculoMsj;
-import java.util.Properties;
-import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
